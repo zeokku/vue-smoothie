@@ -31,14 +31,16 @@ let longText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
 
 <template lang="pug">
 Smoothie.container
+  a#top(href="#bottom") {{ 'Go to the #bottom' }}
   .content
     Smoothie.nested-container(:weight="0.1")
       div {{ 'NESTED CONTAINER\n' + longText }}
     OmniSmoothie.horizontal-container
-      div(:style="{ width: '200rem' }") {{ 'HORIZONTAL WORKS AS OMNI\n' + longText }}
+      div(:style="{ width: '200rem' }") {{ 'HORIZONTAL WORKS IN OMNI FLAVOR\n' + longText }}
     template(v-for="(image, index) in images")
       img(:src="'/images/' + image" lazy :style="{ gridColumn: index % 2 + 1, gridRow: index + 2 }")
       div(:style="{ gridColumn: (index + 1) % 2 + 1, gridRow: index + 2 }") {{ paragraphs[index] }}
+  a#bottom(href="#top") {{ 'Go to the #top' }}
     
 
 </template>

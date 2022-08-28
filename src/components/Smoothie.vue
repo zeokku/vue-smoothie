@@ -10,7 +10,10 @@ div(ref="wrap" @scroll="onScroll" :style="{ overflow: 'auto' }")
 import { onMounted, onUnmounted, onUpdated, shallowRef } from 'vue';
 
 let props = withDefaults(defineProps<{
-  weight?: number
+  // the bigger, the faster transition
+  weight?: number,
+  // limit maximum transition speed (dx/dt) 
+  clamp?: number
 }>(), { weight: 0.06 });
 
 let wrap = shallowRef<HTMLDivElement>();
@@ -45,6 +48,9 @@ let resizeObserver = new ResizeObserver(() => {
 onMounted(() => {
   console.log('on mounted')
   resizeObserver.observe(content.value!)
+
+  // in case of hard defined dimensions, resize observer won't trigger, so do init run
+  updateSpacer()
 
   let aspect = 1000 / 60;
   let prev = performance.now();
