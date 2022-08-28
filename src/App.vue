@@ -2,6 +2,7 @@
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import Smoothie from './components/Smoothie.vue'
+import OmniSmoothie from './components/OmniSmoothie.vue';
 
 let images = [
   'alice-donovan-rouse-tMHAmxLyzvA-unsplash.jpg',
@@ -24,15 +25,37 @@ let paragraphs = [
 
   'Proin gravida hendrerit lectus a. Mi bibendum neque egestas congue quisque egestas diam in. Consectetur lorem donec massa sapien faucibus et molestie. Ultricies mi eget mauris pharetra. Sapien eget mi proin sed libero enim sed faucibus. Commodo odio aenean sed adipiscing diam donec. Tempor orci eu lobortis elementum nibh tellus molestie nunc. Proin gravida hendrerit lectus a. Mi bibendum neque egestas congue quisque egestas diam in.'
 ]
+
+let longText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Iaculis at erat pellentesque adipiscing commodo. Consequat nisl vel pretium lectus quam id. Duis tristique sollicitudin nibh sit amet commodo. Amet mauris commodo quis imperdiet massa tincidunt nunc pulvinar sapien. Integer quis auctor elit sed vulputate mi. At risus viverra adipiscing at in tellus integer. Mollis nunc sed id semper risus in hendrerit gravida rutrum. Senectus et netus et malesuada fames ac turpis. Amet porttitor eget dolor morbi non arcu risus. Molestie a iaculis at erat pellentesque adipiscing commodo elit. Mus mauris vitae ultricies leo integer malesuada nunc vel risus. Ut venenatis tellus in metus vulputate eu. Elementum integer enim neque volutpat ac tincidunt vitae semper quis. Arcu cursus vitae congue mauris. Quam vulputate dignissim suspendisse in est ante in nibh mauris. Cursus turpis massa tincidunt dui ut ornare lectus sit. Magna fringilla urna porttitor rhoncus dolor purus. Ut consequat semper viverra nam libero justo laoreet sit. Enim facilisis gravida neque convallis. Turpis egestas integer eget aliquet nibh praesent tristique magna sit. Et tortor at risus viverra. Vitae aliquet nec ullamcorper sit. Volutpat blandit aliquam etiam erat. Mauris vitae ultricies leo integer malesuada nunc vel. Urna condimentum mattis pellentesque id. Dui id ornare arcu odio ut sem nulla pharetra. Ut pharetra sit amet aliquam id. Eget magna fermentum iaculis eu non diam phasellus vestibulum. Egestas pretium aenean pharetra magna. Arcu non odio euismod lacinia at. Phasellus egestas tellus rutrum tellus pellentesque eu tincidunt tortor. Cursus vitae congue mauris rhoncus aenean. In arcu cursus euismod quis viverra nibh cras. Vitae elementum curabitur vitae nunc sed velit dignissim sodales ut. Pretium lectus quam id leo in vitae turpis massa. Eget est lorem ipsum dolor. Nunc scelerisque viverra mauris in aliquam sem fringilla. Egestas purus viverra accumsan in nisl nisi scelerisque eu. Gravida neque convallis a cras semper."
 </script>
 
 <template lang="pug">
-Smoothie
-  template(v-for="(image, index) in images")
-    img(:src="'/images/' + image" lazy)
-    p {{ paragraphs[index] }}
+Smoothie(:style="{ height: '100%' }")
+  div.content
+    Smoothie(:style="{ height: '20rem' }")
+      div {{ 'NESTED CONTAINER\n' + longText }}
+    OmniSmoothie(:style="{ height: '20rem', width: '100%' }")
+      div(:style="{ width: '200rem' }") {{ 'HORIZONTAL WORKS AS OMNI\n' + longText }}
+    template(v-for="(image, index) in images")
+      img(:src="'/images/' + image" lazy :style="{ gridColumn: index % 2 + 1, gridRow: index + 2 }")
+      div(:style="{ gridColumn: (index + 1) % 2 + 1, gridRow: index + 2 }") {{ paragraphs[index] }}
+    
 
 </template>
 
 <style scoped>
+.content {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+
+  padding: 3rem;
+}
+
+
+
+img {
+  width: 100%;
+  object-fit: cover;
+}
 </style>

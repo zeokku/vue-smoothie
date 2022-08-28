@@ -1,11 +1,17 @@
 <template lang="pug">
 div(ref="wrap" @scroll="onScroll" :style="{ overflow: 'auto' }")
-  div(ref="content" :style="{ position: 'sticky', top: 0, height: 0, willChange: 'transform' }")
+  div(ref="content" :style="{ position: 'sticky', top: 0, height: 0, left: 0, width: 0, willChange: 'transform' }")
     slot
   div(ref="spacer")
 </template>
 
 <script lang="ts" setup>
+/*
+x - scroll is idk, is it even needed?
+left: 0, width: 0, 
+
+*/
+
 import { onMounted, onUnmounted, onUpdated, shallowRef } from 'vue';
 
 let wrap = shallowRef<HTMLDivElement>();
@@ -17,17 +23,21 @@ let raf: number;
 // target x, y
 // smooth x, y
 let
+  tx = 0,
   ty = 0,
+  x = 0,
   y = 0;
 
 const onScroll = (e: UIEvent) => {
   ({
+    scrollLeft: tx,
     scrollTop: ty
   } = wrap.value!)
 }
 
 // don't forget this callback will be fired on old dom element removal, so technically it will update size twice, which shouldn't be a problem
 function updateSpacer() {
+  spacer.value!.style.width = content.value!.scrollWidth + 'px';
   spacer.value!.style.height = content.value!.scrollHeight + 'px';
 }
 
@@ -41,6 +51,9 @@ onMounted(() => {
   console.log('on mounted')
   resizeObserver.observe(content.value!)
 
+  // in case of hard defined dimensions, resize observer won't trigger, so do init run
+  updateSpacer()
+
   let aspect = 1000 / 60;
   let prev = performance.now();
 
@@ -51,9 +64,11 @@ onMounted(() => {
     let dt = now - prev;
     prev = now;
 
+    x += 0.06 * dt / aspect * (tx - x);
     y += 0.06 * dt / aspect * (ty - y);
 
-    content.value!.style.transform = `translate3D(0, ${-y}px, 0)`
+    content.value!.style.transform = `translate3D(${-x}px, ${-y}px, 0)`
+    // content.value!.style.transform = `translate3D(0, ${-y}px, 0)`
   })
 })
 
