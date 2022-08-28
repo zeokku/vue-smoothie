@@ -8,7 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-dist
+# dist # dist is needed to host example on github pages
 dist-ssr
 *.local
 

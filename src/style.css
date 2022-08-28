@@ -1,7 +1,7 @@
 html,
 body,
 #app {
-  /* transfer scroll handling to content wrap by setting concrete height */
+  /* pass down scroll handling to content wrap by setting concrete height */
   height: 100%;
 }
 

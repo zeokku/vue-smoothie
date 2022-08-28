@@ -1,12 +1,17 @@
 <template lang="pug">
 div(ref="wrap" @scroll="onScroll" :style="{ overflow: 'auto' }")
-  div(ref="content" :style="{ position: 'sticky', top: 0, height: 0, willChange: 'transform' }")
-    slot
+  div(:style="{ position: 'sticky', top: 0, height: 0, willChange: 'transform' }")
+    div(ref="content")
+      slot
   div(ref="spacer")
 </template>
 
 <script lang="ts" setup>
 import { onMounted, onUnmounted, onUpdated, shallowRef } from 'vue';
+
+let props = withDefaults(defineProps<{
+  weight?: number
+}>(), { weight: 0.06 });
 
 let wrap = shallowRef<HTMLDivElement>();
 let spacer = shallowRef<HTMLDivElement>();
@@ -51,7 +56,7 @@ onMounted(() => {
     let dt = now - prev;
     prev = now;
 
-    y += 0.06 * dt / aspect * (ty - y);
+    y += props.weight * dt / aspect * (ty - y);
 
     content.value!.style.transform = `translate3D(0, ${-y}px, 0)`
   })

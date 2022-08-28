@@ -30,11 +30,11 @@ let longText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
 </script>
 
 <template lang="pug">
-Smoothie(:style="{ height: '100%' }")
-  div.content
-    Smoothie(:style="{ height: '20rem' }")
+Smoothie.container
+  .content
+    Smoothie.nested-container(:weight="0.1")
       div {{ 'NESTED CONTAINER\n' + longText }}
-    OmniSmoothie(:style="{ height: '20rem', width: '100%' }")
+    OmniSmoothie.horizontal-container
       div(:style="{ width: '200rem' }") {{ 'HORIZONTAL WORKS AS OMNI\n' + longText }}
     template(v-for="(image, index) in images")
       img(:src="'/images/' + image" lazy :style="{ gridColumn: index % 2 + 1, gridRow: index + 2 }")
@@ -44,14 +44,33 @@ Smoothie(:style="{ height: '100%' }")
 </template>
 
 <style scoped>
+.container {
+  display: flex;
+  justify-content: center;
+
+  height: 100%;
+}
+
 .content {
   display: grid;
-  gap: 1rem;
+  gap: 1rem 3rem;
   grid-template-columns: 1fr 1fr;
+
+  max-width: 1000px;
+
+  align-items: center;
 
   padding: 3rem;
 }
 
+.nested-container {
+  height: 20rem;
+}
+
+.horizontal-container {
+  height: 20rem;
+  width: 100%;
+}
 
 
 img {
