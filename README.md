@@ -4,7 +4,7 @@
 
 ⚡ **Native** means the library doesn't interfere with scroll logic **at all**. Every scroll feature works as it should be.
 
-## [DEMO](https://zeokku.github.io/vue-smoothie) ([EXAMPLE SOURCE](https://github.com/zeokku/vue-smoothie/src/App.vue))
+## [DEMO](https://zeokku.github.io/vue-smoothie) ([EXAMPLE SOURCE](https://github.com/zeokku/vue-smoothie/blob/main/src/App.vue))
 
 <hr>
 
