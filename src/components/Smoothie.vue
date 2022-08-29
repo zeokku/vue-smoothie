@@ -34,9 +34,7 @@ let
 const onScroll = () => ({ scrollTop: ty } = wrap.value!)
 
 // don't forget this callback will be fired on old dom element removal, so technically it will update size twice, which shouldn't be a problem, though
-function updateSpacer() {
-  spacer.value!.style.height = content.value!.scrollHeight + 'px';
-}
+const updateSpacer = () => spacer.value!.style.height = content.value!.scrollHeight + 'px';
 
 let resizeObserver = new ResizeObserver(updateSpacer)
 
@@ -69,5 +67,6 @@ onUpdated(() => {
 
 onUnmounted(() => {
   cancelAnimationFrame(raf)
+  resizeObserver.disconnect()
 })
 </script>

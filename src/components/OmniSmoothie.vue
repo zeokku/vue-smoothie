@@ -39,7 +39,7 @@ const onScroll = () =>
 
 
 // don't forget this callback will be fired on old dom element removal, so technically it will update size twice, which shouldn't be a problem
-function updateSpacer() {
+const updateSpacer = () => {
   spacer.value!.style.width = content.value!.scrollWidth + 'px';
   spacer.value!.style.height = content.value!.scrollHeight + 'px';
 }
@@ -77,5 +77,6 @@ onUpdated(() => {
 
 onUnmounted(() => {
   cancelAnimationFrame(raf)
+  resizeObserver.disconnect()
 })
 </script>
