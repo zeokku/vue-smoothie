@@ -1,7 +1,7 @@
 <template lang="pug">
 div(ref="wrap" @scroll="onScroll" :style="{ overflow: 'auto' }")
-  div(ref="content" :style="{ position: 'sticky', top: 0, height: 0, left: 0, width: 0, willChange: 'transform' }")
-    div(ref="content")
+  div(ref="content" :style="{ position: 'sticky', top: 0, height: 0, left: 0, width: 0 }")
+    div(ref="content" :style="{ willChange: 'transform' }")
       slot
   div(ref="spacer")
 </template>
@@ -10,9 +10,12 @@ div(ref="wrap" @scroll="onScroll" :style="{ overflow: 'auto' }")
 
 import { onMounted, onUnmounted, onUpdated, shallowRef } from 'vue';
 
-let props = withDefaults(defineProps<{
-  weight?: number
-}>(), { weight: 0.06 });
+let props = withDefaults(
+  defineProps<{
+    weight?: number
+  }>(),
+  { weight: 0.06 }
+);
 
 let wrap = shallowRef<HTMLDivElement>();
 let spacer = shallowRef<HTMLDivElement>();
@@ -28,12 +31,12 @@ let
   x = 0,
   y = 0;
 
-const onScroll = (e: UIEvent) => {
-  ({
-    scrollLeft: tx,
-    scrollTop: ty
-  } = wrap.value!)
-}
+const onScroll = () =>
+({
+  scrollLeft: tx,
+  scrollTop: ty
+} = wrap.value!)
+
 
 // don't forget this callback will be fired on old dom element removal, so technically it will update size twice, which shouldn't be a problem
 function updateSpacer() {
@@ -41,14 +44,9 @@ function updateSpacer() {
   spacer.value!.style.height = content.value!.scrollHeight + 'px';
 }
 
-let resizeObserver = new ResizeObserver(() => {
-  console.log('rs obs cb', content.value)
-
-  updateSpacer()
-})
+let resizeObserver = new ResizeObserver(updateSpacer)
 
 onMounted(() => {
-  console.log('on mounted')
   resizeObserver.observe(content.value!)
 
   // in case of hard defined dimensions, resize observer won't trigger, so do init run
@@ -70,13 +68,10 @@ onMounted(() => {
     y += w * dt / aspect * (ty - y);
 
     content.value!.style.transform = `translate3D(${-x}px, ${-y}px, 0)`
-    // content.value!.style.transform = `translate3D(0, ${-y}px, 0)`
   })
 })
 
 onUpdated(() => {
-  console.log('on updated', content.value)
-
   resizeObserver.observe(content.value!)
 })
 

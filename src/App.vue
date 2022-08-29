@@ -3,6 +3,24 @@
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import Smoothie from './components/Smoothie.vue'
 import OmniSmoothie from './components/OmniSmoothie.vue';
+import { onUnmounted, shallowRef } from 'vue';
+
+import { Pane } from 'tweakpane'
+
+let scrollWeight = shallowRef(0.06);
+let pane = new Pane();
+
+pane
+  .addFolder({
+    title: 'Main content scroll weight'
+  })
+  .addInput(scrollWeight, 'value', {
+    min: 0,
+    max: 0.5,
+    step: 0.01
+  })
+
+onUnmounted(() => { pane.dispose() })
 
 let images = [
   'alice-donovan-rouse-tMHAmxLyzvA-unsplash.jpg',
@@ -30,7 +48,7 @@ let longText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
 </script>
 
 <template lang="pug">
-Smoothie.container
+Smoothie.container(:weight="scrollWeight")
   a#top(href="#bottom") {{ 'Go to the #bottom' }}
   .content
     Smoothie.nested-container(:weight="0.1")
@@ -50,6 +68,10 @@ Smoothie.container
   display: flex;
   justify-content: center;
 
+  /* important when using borders, padding */
+  box-sizing: border-box;
+  padding: 3rem;
+
   height: 100%;
 }
 
@@ -62,7 +84,6 @@ Smoothie.container
 
   align-items: center;
 
-  padding: 3rem;
 }
 
 .nested-container {
@@ -74,6 +95,10 @@ Smoothie.container
   width: 100%;
 }
 
+a {
+  display: block;
+  margin: 1rem 0;
+}
 
 img {
   width: 100%;

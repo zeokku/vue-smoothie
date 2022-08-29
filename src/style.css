@@ -3,6 +3,7 @@ body,
 #app {
   /* pass down scroll handling to content wrap by setting concrete height */
   height: 100%;
+  /* overflow: hidden; */
 }
 
 :root {

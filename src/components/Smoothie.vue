@@ -1,7 +1,7 @@
 <template lang="pug">
 div(ref="wrap" @scroll="onScroll" :style="{ overflow: 'auto' }")
-  div(:style="{ position: 'sticky', top: 0, height: 0, willChange: 'transform' }")
-    div(ref="content")
+  div(:style="{ position: 'sticky', top: 0, height: 0 }")
+    div(ref="content" :style="{ willChange: 'transform' }")
       slot
   div(ref="spacer")
 </template>
@@ -9,12 +9,15 @@ div(ref="wrap" @scroll="onScroll" :style="{ overflow: 'auto' }")
 <script lang="ts" setup>
 import { onMounted, onUnmounted, onUpdated, shallowRef } from 'vue';
 
-let props = withDefaults(defineProps<{
-  // the bigger, the faster transition
-  weight?: number,
-  // limit maximum transition speed (dx/dt) 
-  clamp?: number
-}>(), { weight: 0.06 });
+let props = withDefaults(
+  defineProps<{
+    // the bigger, the faster transition
+    weight?: number,
+    // @todo limit maximum transition speed (dx/dt) 
+    // clamp?: number
+  }>(),
+  { weight: 0.06 }
+);
 
 let wrap = shallowRef<HTMLDivElement>();
 let spacer = shallowRef<HTMLDivElement>();
@@ -22,31 +25,22 @@ let content = shallowRef<HTMLDivElement>();
 
 let raf: number;
 
-// target x, y
-// smooth x, y
+// target y
+// smooth y
 let
   ty = 0,
   y = 0;
 
-const onScroll = (e: UIEvent) => {
-  ({
-    scrollTop: ty
-  } = wrap.value!)
-}
+const onScroll = () => ({ scrollTop: ty } = wrap.value!)
 
-// don't forget this callback will be fired on old dom element removal, so technically it will update size twice, which shouldn't be a problem
+// don't forget this callback will be fired on old dom element removal, so technically it will update size twice, which shouldn't be a problem, though
 function updateSpacer() {
   spacer.value!.style.height = content.value!.scrollHeight + 'px';
 }
 
-let resizeObserver = new ResizeObserver(() => {
-  console.log('rs obs cb', content.value)
-
-  updateSpacer()
-})
+let resizeObserver = new ResizeObserver(updateSpacer)
 
 onMounted(() => {
-  console.log('on mounted')
   resizeObserver.observe(content.value!)
 
   // in case of hard defined dimensions, resize observer won't trigger, so do init run
@@ -69,8 +63,7 @@ onMounted(() => {
 })
 
 onUpdated(() => {
-  console.log('on updated', content.value)
-
+  // update observer with a new element
   resizeObserver.observe(content.value!)
 })
 
