@@ -1,1 +1,64 @@
-Don't forget about `box-sizing` when using `padding` and/or `border`
+# 🍹 Next-gen compact native smooth scrolling component library for Vue 3
+
+⚡ **No** scrollbar reinventing using DOM elements, **no** weird logic, **only** native `scroll` event, a sprinkle of CSS magic and the power of `ResizeObserver`.
+
+⚡ **Native** means the library doesn't interfere with scroll logic **at all**. Every scroll feature works as it should be.
+
+## [DEMO](https://zeokku.github.io/vue-smoothie) ([EXAMPLE SOURCE](https://github.com/zeokku/vue-smoothie/src/App.vue))
+
+<hr>
+
+## Usage:
+
+You should use the component as a container element for your scrollable content. The container has `overflow: auto` by default.
+
+```vue
+<script setup>
+import { Smoothie } from "vue-smoothie";
+</script>
+
+<template>
+  <Smoothie class="container">
+    <div>
+      <p>Test paragraph</p>
+    </div>
+  </Smoothie>
+</template>
+
+<style>
+.container {
+  /* define height and/or width */
+}
+</style>
+```
+
+### There are **two flavors** of the component:
+
+- **`Smoothie`** - use this when you only need vertical scroll.
+- **`OmniSmoothie`** - use this when you need both vertical and horizontal scroll. In this case prefer using `OmniSmoothie` component for all scrollable areas even if they're vertical-only to prevent bundling both flavors simulataneously.
+
+### `weight` prop
+
+You can setup how smooth the scrolling is by specifying an _optional_ `weight` prop:
+`<Smoothie :weight="0.03">`
+
+## Common issues
+
+- To make root (App) view work with `smoothie` you have to pass down overflow to the `smoothie` element. One way of doing so is:
+
+  ```css
+  html,
+  body,
+  #app,
+  .container {
+    height: 100%;
+  }
+  ```
+
+  where `#app` is the element you mount your Vue application on and `.container` a class applied to root `<smoothie>` element
+
+- Instead of styling `#app` with `padding` and etc, better style scroll container
+
+- Don't forget about `box-sizing: border-box` when a container has `border` and/or `padding` to accomodate it into its `width` and `height` to prevent multiple scrollbars, root-level (`<html>`) scrollbar overtaking overflow and other issues
+
+- Scrollbar appears inside of page not at a side - you need to set `width` to `100%`
