@@ -5,7 +5,7 @@ import Smoothie from './components/Smoothie.vue'
 import OmniSmoothie from './components/OmniSmoothie.vue';
 import { onUnmounted, shallowRef } from 'vue';
 
-import { Pane } from 'tweakpane'
+import { Pane } from 'tweakpane';
 
 let scrollWeight = shallowRef(0.06);
 let pane = new Pane();
@@ -48,6 +48,7 @@ let longText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
 </script>
 
 <template lang="pug">
+
 Smoothie.container(:weight="scrollWeight")
   a#top(href="#bottom") {{ 'Go to the #bottom' }}
   .content
@@ -59,11 +60,18 @@ Smoothie.container(:weight="scrollWeight")
       img(:src="image" :style="{ gridColumn: index % 2 + 1, gridRow: index + 2 }")
       div(:style="{ gridColumn: (index + 1) % 2 + 1, gridRow: index + 2 }") {{ paragraphs[index] }}
   a#bottom(href="#top") {{ 'Go to the #top' }}
-    
 
 </template>
 
-<style scoped>
+<style>
+/* IMPORTANT */
+html,
+body,
+#app {
+  /* pass down scroll handling to content wrap by setting concrete height */
+  height: 100%;
+}
+
 .container {
   display: flex;
   justify-content: center;
@@ -72,6 +80,7 @@ Smoothie.container(:weight="scrollWeight")
   box-sizing: border-box;
   padding: 3rem;
 
+  /* and setting height of container itself */
   height: 100%;
 }
 
