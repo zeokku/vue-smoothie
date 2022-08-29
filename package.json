@@ -2,21 +2,32 @@
   "name": "vue-smoothie",
   "description": "⚡ Next-gen native smooth scrolling component library for Vue 3",
   "version": "1.0.0",
+  "author": "ZEOKKU <contact@zeokku.com>",
+  "funding": "https://ko-fi.com/zeokku",
+  "license": "MIT",
   "type": "module",
   "files": [
     "index.js",
     "index.d.ts",
-    "src/components/Smoothie.vue",
-    "src/components/OmniSmoothie.vue"
+    "src/components/*"
+  ],
+  "repository": "github:zeokku/vue-smoothie",
+  "bugs": {
+    "url": "https://github.com/zeokku/vue-smoothie/issues"
+  },
+  "homepage": "https://github.com/zeokku/vue-smoothie#readme",
+  "keywords": [
+    "vue",
+    "smooth",
+    "scroll",
+    "scrolling"
   ],
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview"
   },
-  "dependencies": {
-    "vue": "^3.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@tweakpane/core": "^1.1.0",
     "@vitejs/plugin-vue": "^3.0.3",
@@ -25,6 +36,7 @@
     "vue-tsc": "^0.39.5"
   },
   "peerDependencies": {
+    "vue": "^3.2.0",
     "pug": "^3.0.0",
     "typescript": "^4.6.0"
   }

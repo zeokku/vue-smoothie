@@ -8,6 +8,20 @@
 
 <hr>
 
+## Installation:
+
+```console
+pnpm add vue-smoothie
+```
+
+```console
+yarn add vue-smoothie
+```
+
+```console
+npm i vue-smoothie
+```
+
 ## Usage:
 
 You should use the component as a container element for your scrollable content. The container has `overflow: auto` by default.
@@ -35,12 +49,13 @@ import { Smoothie } from "vue-smoothie";
 ### There are **two flavors** of the component:
 
 - **`Smoothie`** - use this when you only need vertical scroll.
-- **`OmniSmoothie`** - use this when you need both vertical and horizontal scroll. In this case prefer using `OmniSmoothie` component for all scrollable areas even if they're vertical-only to prevent bundling both flavors simulataneously.
+- **`OmniSmoothie`** - use this when you need both vertical and horizontal scroll. In this case prefer using OmniSmoothie component for all scrollable areas even if they're vertical-only to prevent bundling both flavors simulataneously.
 
 ### `weight` prop
 
 You can setup how smooth the scrolling is by specifying an _optional_ `weight` prop:
 `<Smoothie :weight="0.03">`
+The lower the value the lazier transition
 
 ## Common issues
 
