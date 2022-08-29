@@ -61,6 +61,13 @@ You can setup how smooth the scrolling is by specifying an _optional_ `weight` p
 `<Smoothie :weight="0.03">`
 The lower the value the lazier transition
 
+### Exposed properties
+
+Both flavors expose an object via `ref` with properties:
+
+- `el` - container DOM element (available in `onMounted` hook)
+- `x` and `y` - current smooth scroll position (x only in Omni)
+
 ## Common issues
 
 - To make root (App) view work with `smoothie` you have to pass down overflow to the `smoothie` element. One way of doing so is:

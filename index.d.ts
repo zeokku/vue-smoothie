@@ -1,8 +1,8 @@
 import type { DefineComponent } from "vue";
 
-type SmoothieComponent = DefineComponent<{ weight?: number }>;
+type SmoothieBase = DefineComponent<{ weight?: number }> & { el: HTMLElement };
 
-declare const Smoothie: SmoothieComponent;
-declare const OmniSmoothie: SmoothieComponent;
+declare const Smoothie: SmoothieBase & { y: number };
+declare const OmniSmoothie: SmoothieBase & { x: number; y: number };
 
 export { Smoothie, OmniSmoothie };

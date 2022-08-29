@@ -3,22 +3,36 @@
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import Smoothie from './components/Smoothie.vue'
 import OmniSmoothie from './components/OmniSmoothie.vue';
-import { onUnmounted, shallowRef } from 'vue';
+import { onMounted, onUnmounted, shallowRef } from 'vue';
 
 import { Pane } from 'tweakpane';
 
 let scrollWeight = shallowRef(0.06);
 let pane = new Pane();
 
-pane
+let paneFolder = pane
   .addFolder({
     title: 'Main content scroll weight'
   })
+
+paneFolder
   .addInput(scrollWeight, 'value', {
     min: 0,
     max: 0.5,
     step: 0.01
   })
+
+let container = shallowRef<typeof Smoothie>();
+
+onMounted(() => {
+  let c = container.value!;
+  paneFolder.addMonitor(c, 'y', {
+    view: 'graph',
+    min: 0,
+    max: c.el.scrollHeight
+  })
+})
+
 
 onUnmounted(() => { pane.dispose() })
 
@@ -49,7 +63,7 @@ let longText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
 
 <template lang="pug">
 
-Smoothie.container(:weight="scrollWeight")
+Smoothie.container(:weight="scrollWeight" ref="container")
   a#top(href="#bottom") {{ 'Go to the #bottom' }}
   .content
     Smoothie.nested-container(:weight="0.1")

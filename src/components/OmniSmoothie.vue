@@ -21,6 +21,14 @@ let wrap = shallowRef<HTMLDivElement>();
 let spacer = shallowRef<HTMLDivElement>();
 let content = shallowRef<HTMLDivElement>();
 
+let exposed = {
+  el: wrap,
+  x: 0,
+  y: 0
+};
+
+defineExpose(exposed);
+
 let raf: number;
 
 // target x, y
@@ -66,6 +74,9 @@ onMounted(() => {
 
     x += w * dt / aspect * (tx - x);
     y += w * dt / aspect * (ty - y);
+
+    exposed.x = x;
+    exposed.y = y;
 
     content.value!.style.transform = `translate3D(${-x}px, ${-y}px, 0)`
   })

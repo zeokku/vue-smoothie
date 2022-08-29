@@ -23,6 +23,13 @@ let wrap = shallowRef<HTMLDivElement>();
 let spacer = shallowRef<HTMLDivElement>();
 let content = shallowRef<HTMLDivElement>();
 
+let exposed = {
+  el: wrap,
+  y: 0
+};
+
+defineExpose(exposed);
+
 let raf: number;
 
 // target y
@@ -38,7 +45,9 @@ const updateSpacer = () => spacer.value!.style.height = content.value!.scrollHei
 
 let resizeObserver = new ResizeObserver(updateSpacer)
 
+
 onMounted(() => {
+  // observing a child div because contentWrap element has fixed size, thus resize observer won't trigger and since slot can be a set of elements it's handy to have just one wrapping div
   resizeObserver.observe(content.value!)
 
   // in case of hard defined dimensions, resize observer won't trigger, so do init run
@@ -55,6 +64,8 @@ onMounted(() => {
     prev = now;
 
     y += props.weight * dt / aspect * (ty - y);
+
+    exposed.y = y;
 
     content.value!.style.transform = `translate3D(0, ${-y}px, 0)`
   })
