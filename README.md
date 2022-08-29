@@ -6,6 +6,10 @@
 
 ## [DEMO](https://zeokku.github.io/vue-smoothie) ([EXAMPLE SOURCE](https://github.com/zeokku/vue-smoothie/blob/main/src/App.vue))
 
+[![npm](https://img.shields.io/npm/v/vue-smoothie?color=pink&style=flat)](https://www.npmjs.com/package/vue-smoothie)
+[![npm](https://img.shields.io/npm/dw/vue-smoothie?color=pink&style=flat)](https://www.npmjs.com/package/vue-smoothie)
+[![Discord](https://img.shields.io/discord/405510915845390347?color=pink&label=join%20discord&style=flat)](https://zeokku.com/discord)
+
 <hr>
 
 ## Installation:
