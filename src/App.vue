@@ -28,7 +28,7 @@ let images = [
   'kentaro-toma-30AwPGSEdsM-unsplash.jpg',
   'lance-anderson-PcCQgQ6KGkI-unsplash.jpg',
   'osman-rana-xhpMNieqBwA-unsplash.jpg',
-]
+].map(name => import.meta.env.BASE_URL + 'images/' + name)
 
 let paragraphs = [
   'Sit amet mattis vulputate enim nulla aliquet. Facilisis leo vel fringilla est ullamcorper. Enim sit amet venenatis urna cursus eget nunc scelerisque viverra. Cursus turpis massa tincidunt dui. Tristique risus nec feugiat in fermentum posuere urna. Pharetra vel turpis nunc eget lorem dolor sed viverra.',
@@ -56,7 +56,7 @@ Smoothie.container(:weight="scrollWeight")
     OmniSmoothie.horizontal-container
       div(:style="{ width: '200rem' }") {{ 'HORIZONTAL WORKS IN OMNI FLAVOR\n' + longText }}
     template(v-for="(image, index) in images")
-      img(:src="'/images/' + image" lazy :style="{ gridColumn: index % 2 + 1, gridRow: index + 2 }")
+      img(:src="image" :style="{ gridColumn: index % 2 + 1, gridRow: index + 2 }")
       div(:style="{ gridColumn: (index + 1) % 2 + 1, gridRow: index + 2 }") {{ paragraphs[index] }}
   a#bottom(href="#top") {{ 'Go to the #top' }}
     
