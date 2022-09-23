@@ -25,7 +25,7 @@
     "scrolling"
   ],
   "scripts": {
-    "dev": "vite",
+    "dev": "npm run build-lib && vite",
     "build-demo": "vite build",
     "create-entry": "echo export { Smoothie } from './smoothie'; export { Smoothie as OmniSmoothie } from './omnismoothie.js' > ./dist_lib/index.js",
     "build-lib": " cross-env __OMNI=\"\" vite build --mode lib && cross-env __OMNI=1 vite build --mode lib && npm run create-entry",
