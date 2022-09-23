@@ -1,13 +1,13 @@
 <template lang="pug">
 div(ref="wrap" @scroll="onScroll" :style="{ overflow: 'auto' }")
-  div(:style="{ position: 'sticky', top: 0, height: 0 }")
+  div(:style="contentWrapStyle")
     div(ref="content" :style="{ willChange: 'transform' }")
       slot
   div(ref="spacer")
 </template>
 
 <script lang="ts" setup>
-import { onMounted, onUnmounted, onUpdated, shallowRef } from 'vue';
+import { onMounted, onUnmounted, onUpdated, shallowRef, StyleValue } from 'vue';
 
 let props = withDefaults(
   defineProps<{
@@ -19,29 +19,63 @@ let props = withDefaults(
   { weight: 0.06 }
 );
 
+let contentWrapStyle: StyleValue =
+  import.meta.env.__OMNI ?
+    { position: 'sticky', top: 0, height: 0, left: 0, width: 0 } :
+    { position: 'sticky', top: 0, height: 0 };
+
 let wrap = shallowRef<HTMLDivElement>();
 let spacer = shallowRef<HTMLDivElement>();
 let content = shallowRef<HTMLDivElement>();
 
-let exposed = {
-  el: wrap,
-  y: 0
-};
+let exposed = import.meta.env.__OMNI ?
+  {
+    el: wrap,
+    x: 0,
+    y: 0
+  } :
+  {
+    el: wrap,
+    y: 0
+  };
 
 defineExpose(exposed);
 
 let raf: number;
 
-// target y
-// smooth y
+// target
+// smooth
 let
+  tx = 0,
   ty = 0,
+  x = 0,
   y = 0;
 
-const onScroll = () => ({ scrollTop: ty } = wrap.value!)
+const onScroll = () => {
+  if (import.meta.env.__OMNI) {
+    ({
+      scrollLeft: tx,
+      scrollTop: ty
+    } = wrap.value!)
+  }
+  else {
+    ({
+      scrollTop: ty
+    } = wrap.value!)
+  }
+}
 
 // don't forget this callback will be fired on old dom element removal, so technically it will update size twice, which shouldn't be a problem, though
-const updateSpacer = () => spacer.value!.style.height = content.value!.scrollHeight + 'px';
+const updateSpacer = () => {
+  if (import.meta.env.__OMNI) {
+    spacer.value!.style.width = content.value!.scrollWidth + 'px';
+    spacer.value!.style.height = content.value!.scrollHeight + 'px';
+  }
+  else {
+    spacer.value!.style.height = content.value!.scrollHeight + 'px';
+  }
+}
+
 
 let resizeObserver = new ResizeObserver(updateSpacer)
 
@@ -63,11 +97,26 @@ onMounted(() => {
     let dt = now - prev;
     prev = now;
 
-    y += props.weight * dt / aspect * (ty - y);
+    let k = props.weight * dt / aspect;
+
+    // lerp = a + (b-a) * k = a + bk - ak = a(1-k) + bk
+    y += k * (ty - y);
+    // y = y * (1 - k) + ty * k;
 
     exposed.y = y;
 
-    content.value!.style.transform = `translate3D(0, ${-y}px, 0)`
+    if (import.meta.env.__OMNI) {
+      x += k * (tx - x);
+
+      exposed.x = x;
+    }
+
+    if (import.meta.env.__OMNI) {
+      content.value!.style.transform = `translate3D(${-x}px, ${-y}px, 0)`
+    }
+    else {
+      content.value!.style.transform = `translate3D(0, ${-y}px, 0)`
+    }
   })
 })
 

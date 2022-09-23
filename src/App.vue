@@ -1,8 +1,11 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import Smoothie from './components/Smoothie.vue'
-import OmniSmoothie from './components/OmniSmoothie.vue';
+// import Smoothie from './components/Smoothie.vue'
+// import OmniSmoothie from './components/OmniSmoothie.vue';
+
+import { Smoothie, OmniSmoothie } from "../dist_lib"
+
 import { onMounted, onUnmounted, shallowRef } from 'vue';
 
 import { Pane } from 'tweakpane';
@@ -31,7 +34,10 @@ onMounted(() => {
     min: 0,
     max: c.el.scrollHeight
   })
+
+  console.log('Exposed object:', c)
 })
+
 
 
 onUnmounted(() => { pane.dispose() })

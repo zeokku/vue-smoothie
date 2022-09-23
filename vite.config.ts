@@ -11,11 +11,16 @@ export default defineConfig(({ mode }) => ({
   publicDir: mode === "lib" ? false : "public",
 
   build: {
+    // minify: false,
+
     outDir: mode === "lib" ? "dist_lib" : "dist",
+
+    emptyOutDir: !process.env.__OMNI,
 
     rollupOptions: {
       output: {
-        entryFileNames: `[name].js`,
+        entryFileNames:
+          mode === "lib" ? (process.env.__OMNI ? "omniSmoothie.js" : "smoothie.js") : `[name].js`,
         chunkFileNames: `[name].js`,
         assetFileNames: `[name].[ext]`,
       },
@@ -31,8 +36,9 @@ export default defineConfig(({ mode }) => ({
             entry: resolve(__dirname, "index.js"),
             name: "Smoothie Components Library",
             formats: ["es"],
-            // filename: "smoothie.js",
           }
         : undefined,
   },
+
+  envPrefix: ["VITE_", "__"],
 }));
