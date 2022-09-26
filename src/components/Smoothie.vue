@@ -9,6 +9,8 @@ div(ref="wrap" @scroll="onScroll" :style="{ overflow: 'auto' }")
 <script lang="ts" setup>
 import { onMounted, onUnmounted, onUpdated, shallowRef, StyleValue } from 'vue';
 
+// import { damp } from 'maath/easing'
+
 let props = withDefaults(
   defineProps<{
     // the bigger, the faster transition
@@ -90,6 +92,9 @@ onMounted(() => {
   let aspect = 1000 / 60;
   let prev = performance.now();
 
+  // let xc = { v: 0 }
+  // let yc = { v: 0 }
+
   requestAnimationFrame(function rafCb() {
     raf = requestAnimationFrame(rafCb);
 
@@ -102,6 +107,11 @@ onMounted(() => {
     // lerp = a + (b-a) * k = a + bk - ak = a(1-k) + bk
     y += k * (ty - y);
     // y = y * (1 - k) + ty * k;
+
+    // damp
+    // @todo use `keyof` in source
+    // damp(yc, 'v', ty)
+    // y = yc.v
 
     exposed.y = y;
 

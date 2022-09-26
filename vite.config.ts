@@ -12,6 +12,7 @@ export default defineConfig(({ mode }) => ({
 
   build: {
     // minify: false,
+    // minify: "terser",
 
     outDir: mode === "lib" ? "dist_lib" : "dist",
 
@@ -27,7 +28,7 @@ export default defineConfig(({ mode }) => ({
 
       // make sure to externalize deps that shouldn't be bundled
       // into your library
-      external: mode === "lib" ? ["vue"] : undefined,
+      external: mode === "lib" ? ["vue", "three"] : undefined,
     },
 
     lib:

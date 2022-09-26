@@ -45,5 +45,8 @@
   },
   "peerDependencies": {
     "vue": "^3.2.0"
+  },
+  "dependencies": {
+    "maath": "^0.4.2"
   }
 }
