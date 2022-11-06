@@ -27,7 +27,7 @@
   "scripts": {
     "dev": "npm run build-lib && vite",
     "build-demo": "vite build",
-    "create-entry": "echo export { Smoothie } from './smoothie'; export { Smoothie as OmniSmoothie } from './omnismoothie.js' > ./dist_lib/index.js",
+    "create-entry": "echo export { Smoothie } from './smoothie'; export { Smoothie as OmniSmoothie } from './omniSmoothie' > ./dist_lib/index.js",
     "build-lib": " cross-env __OMNI=\"\" vite build --mode lib && cross-env __OMNI=1 vite build --mode lib && npm run create-entry",
     "build-all": "npm run build-lib && npm run build-demo"
   },
@@ -44,9 +44,6 @@
     "vue-tsc": "^0.39.5"
   },
   "peerDependencies": {
-    "vue": "^3.2.0"
-  },
-  "dependencies": {
-    "maath": "^0.4.2"
+    "vue": "^3.0.0"
   }
 }

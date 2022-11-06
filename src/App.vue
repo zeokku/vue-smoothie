@@ -1,14 +1,17 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-// import Smoothie from './components/Smoothie.vue'
-// import OmniSmoothie from './components/OmniSmoothie.vue';
 
-import { Smoothie, OmniSmoothie } from "../dist_lib"
 
 import { onMounted, onUnmounted, shallowRef } from 'vue';
 
 import { Pane } from 'tweakpane';
+
+import { Smoothie, OmniSmoothie } from "../dist_lib"
+
+// import Smoothie from './components/Smoothie.vue'
+// const OmniSmoothie = Smoothie;
+
 
 let scrollWeight = shallowRef(0.06);
 let pane = new Pane();
@@ -70,17 +73,17 @@ let longText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
 <template lang="pug">
 
 Smoothie.container(:weight="scrollWeight" ref="container")
-  a#top(href="#bottom") {{ 'Go to the #bottom' }}
-  .content
-    Smoothie.nested-container(:weight="0.1")
-      div {{ 'NESTED CONTAINER\n' + longText }}
-    OmniSmoothie.horizontal-container
-      div(:style="{ width: '200rem' }") {{ 'HORIZONTAL WORKS IN OMNI FLAVOR\n' + longText }}
-    template(v-for="(image, index) in images")
-      img(:src="image" :style="{ gridColumn: index % 2 + 1, gridRow: index + 2 }")
-      div(:style="{ gridColumn: (index + 1) % 2 + 1, gridRow: index + 2 }") {{ paragraphs[index] }}
-  a#bottom(href="#top") {{ 'Go to the #top' }}
-
+  .content-wrap
+    a#top(href="#bottom") {{ 'Go to the #bottom' }}
+    .content
+      OmniSmoothie.nested-container(:weight="0.1")
+        div {{ 'NESTED CONTAINER\n' + longText }}
+      OmniSmoothie.horizontal-container
+        div(:style="{ width: '200rem' }") {{ 'HORIZONTAL WORKS IN OMNI FLAVOR\n' + longText }}
+      template(v-for="(image, index) in images")
+        img(:src="image" :style="{ gridColumn: index % 2 + 1, gridRow: index + 2 }")
+        div(:style="{ gridColumn: (index + 1) % 2 + 1, gridRow: index + 2 }") {{ paragraphs[index] }}
+    a#bottom(href="#top") {{ 'Go to the #top' }}
 </template>
 
 <style>
@@ -93,15 +96,30 @@ body,
 }
 
 .container {
-  display: flex;
-  justify-content: center;
+  /* firefox breaks if container is flex... */
+  /* display: flex;
+  justify-content: center; */
+
+  /* margin: auto; */
 
   /* important when using borders, padding */
-  box-sizing: border-box;
-  padding: 3rem;
+  /* box-sizing: border-box;
+  padding: 3rem; */
+
+  /* ! better not style container at all, only set dimensions */
 
   /* and setting height of container itself */
   height: 100%;
+}
+
+.content-wrap {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+
+  box-sizing: border-box;
+  padding: 3rem;
 }
 
 .content {

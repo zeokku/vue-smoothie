@@ -1,49 +1,89 @@
 <template lang="pug">
-div(ref="wrap" @scroll="onScroll" :style="{ overflow: 'auto' }")
+div(ref="wrap" @scroll="onScroll" :style="wrapStyle")
   div(:style="contentWrapStyle")
-    div(ref="content" :style="{ willChange: 'transform' }")
+    div(ref="content" :style="contentStyle")
       slot
   div(ref="spacer")
 </template>
 
 <script lang="ts" setup>
-import { onMounted, onUnmounted, onUpdated, shallowRef, StyleValue } from 'vue';
+import { onMounted, onUnmounted, onUpdated, reactive, shallowReactive, } from 'vue';
 
-// import { damp } from 'maath/easing'
+import type { StyleValue, CSSProperties } from 'vue';
+
+// import { smoother } from '../b';
+
+// https://easings.net/#easeOutCubic
+// let curve = bezier(0.33, 1, 0.67, 1);
 
 let props = withDefaults(
   defineProps<{
-    // the bigger, the faster transition
-    weight?: number,
-    // @todo limit maximum transition speed (dx/dt) 
+    weight: number
+    // fn?(t: number): number;
     // clamp?: number
   }>(),
-  { weight: 0.06 }
+  {
+    weight: 0.06
+    // fn: x => x,
+    // clamp: Infinity
+  }
 );
 
+let wrap = $shallowRef<HTMLDivElement>();
+let content = $shallowRef<HTMLDivElement>();
+let spacer = $shallowRef<HTMLDivElement>();
+
+let wrapStyle: StyleValue = { overflow: 'auto' } /*satisfies StyleValue*/;
 let contentWrapStyle: StyleValue =
   import.meta.env.__OMNI ?
-    { position: 'sticky', top: 0, height: 0, left: 0, width: 0 } :
-    { position: 'sticky', top: 0, height: 0 };
+    // width: 0 is needed (because for some reason it's counted towards horizontal overflow when by any logic it should not) and obv it's a problem on firefox only...
+    // well width breaks vertical omni
+    ({ position: 'sticky', top: 0, left: 0 } /*satisfies StyleValue*/) :
+    ({ position: 'sticky', top: 0 } /*satisfies StyleValue*/);
 
-let wrap = shallowRef<HTMLDivElement>();
-let spacer = shallowRef<HTMLDivElement>();
-let content = shallowRef<HTMLDivElement>();
+
+// @note to make resize observer to work yet prevent stupid ass firefox bug, it's better to set maxHeight instead of height, because with static dimensions resize observer won't ever update
+// but this causes problems with initial scroll height calculation even on chrome omg
+// alternative is to set this pos: abs
+let contentStyle = ({
+  willChange: 'transform',
+  // width: '100%', // inherit parent size
+
+  position: 'absolute',
+  left: 0,
+  right: 0
+
+  // maxHeight: 0
+} as CSSProperties
+/*satisfies StyleValue*/);
+
 
 let exposed = import.meta.env.__OMNI ?
   {
-    el: wrap,
+    el: $$(wrap),
     x: 0,
     y: 0
   } :
   {
-    el: wrap,
+    el: $$(wrap),
     y: 0
   };
 
 defineExpose(exposed);
 
-let raf: number;
+let af: number;
+
+// let smooth = smoother(1000, (value) => {
+//   if (import.meta.env.__OMNI) {
+//     // content!.style.transform = `translate3D(${-x}px, ${-y}px, 0)`
+//   }
+//   else {
+//     content!.style.transform = `translate3D(0, ${-value}px, 0)`
+
+//     exposed.y = value;
+
+//   }
+// })
 
 // target
 // smooth
@@ -58,24 +98,38 @@ const onScroll = () => {
     ({
       scrollLeft: tx,
       scrollTop: ty
-    } = wrap.value!)
+    } = wrap!)
   }
   else {
     ({
       scrollTop: ty
-    } = wrap.value!)
+    } = wrap!)
   }
+
+  // smooth(wrap!.scrollTop)
 }
 
 // don't forget this callback will be fired on old dom element removal, so technically it will update size twice, which shouldn't be a problem, though
 const updateSpacer = () => {
+  console.log(
+    'content', content!.scrollHeight, //
+    'content wrap', content!.parentElement!.scrollHeight,
+    'wrap', wrap!.scrollHeight
+  )
+
   if (import.meta.env.__OMNI) {
-    spacer.value!.style.width = content.value!.scrollWidth + 'px';
-    spacer.value!.style.height = content.value!.scrollHeight + 'px';
+    spacer!.style.width = content!.scrollWidth + 'px';
+    spacer!.style.height = content!.scrollHeight + 'px';
   }
   else {
-    spacer.value!.style.height = content.value!.scrollHeight + 'px';
+    spacer!.style.height = content!.scrollHeight + 'px';
   }
+
+  // applying height after first update didn't work, because there are multiple updates and there's no way to realize which one is the last
+  // if (entries) {
+  //   if (!contentStyle.maxHeight)
+  //     contentStyle.maxHeight = '0'
+  // }
 }
 
 
@@ -84,10 +138,18 @@ let resizeObserver = new ResizeObserver(updateSpacer)
 
 onMounted(() => {
   // observing a child div because contentWrap element has fixed size, thus resize observer won't trigger and since slot can be a set of elements it's handy to have just one wrapping div
-  resizeObserver.observe(content.value!)
+  resizeObserver.observe(content!)
+
 
   // in case of hard defined dimensions, resize observer won't trigger, so do init run
   updateSpacer()
+
+
+
+  // setTimeout(() => {
+  //   updateSpacer()
+  // }, 0);
+
 
   let aspect = 1000 / 60;
   let prev = performance.now();
@@ -95,8 +157,8 @@ onMounted(() => {
   // let xc = { v: 0 }
   // let yc = { v: 0 }
 
-  requestAnimationFrame(function rafCb() {
-    raf = requestAnimationFrame(rafCb);
+  requestAnimationFrame(function cb() {
+    af = requestAnimationFrame(cb);
 
     let now = performance.now();
     let dt = now - prev;
@@ -122,21 +184,21 @@ onMounted(() => {
     }
 
     if (import.meta.env.__OMNI) {
-      content.value!.style.transform = `translate3D(${-x}px, ${-y}px, 0)`
+      content!.style.transform = `translate3D(${-x}px, ${-y}px, 0)`
     }
     else {
-      content.value!.style.transform = `translate3D(0, ${-y}px, 0)`
+      content!.style.transform = `translate3D(0, ${-y}px, 0)`
     }
   })
 })
 
 onUpdated(() => {
   // update observer with a new element
-  resizeObserver.observe(content.value!)
+  resizeObserver.observe(content!)
 })
 
 onUnmounted(() => {
-  cancelAnimationFrame(raf)
+  cancelAnimationFrame(af)
   resizeObserver.disconnect()
 })
 </script>

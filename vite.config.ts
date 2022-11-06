@@ -5,15 +5,40 @@ import { resolve } from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  plugins: [vue()],
+  plugins: [
+    vue({
+      reactivityTransform: true,
+      template: {
+        compilerOptions: {
+          hoistStatic: true,
+        },
+      },
+    }),
+
+    // {
+    //   // @todo report
+    //   // for some reason sfc compiler exports vue macro for reactivity transform
+    //   // fixed by referencing in env.d.ts
+    //   name: "Fix reactivity transform",
+    //   transform(code, id) {
+    //     if (/\.vue/.test(id)) {
+    //       return code.replace(/\$shallowRef,?/g, "");
+    //     }
+    //   },
+    // },
+  ],
   base: "/vue-smoothie/",
 
   publicDir: mode === "lib" ? false : "public",
 
   build: {
     // minify: false,
-    // minify: "terser",
-
+    minify: "terser",
+    terserOptions: {
+      compress: {
+        drop_console: true,
+      },
+    },
     outDir: mode === "lib" ? "dist_lib" : "dist",
 
     emptyOutDir: !process.env.__OMNI,

@@ -15,5 +15,6 @@ createApp(App)
   //   created(el, binding: DirectiveBinding<TSmoothieBinding>) {},
   //   unmounted(el) {},
   // })
+  // @todo vnode tree modification?
   //
   .mount("#app");

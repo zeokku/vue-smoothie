@@ -16,13 +16,9 @@
 
 ```console
 pnpm add vue-smoothie
-```
-
-```console
+# or
 yarn add vue-smoothie
-```
-
-```console
+# or
 npm i vue-smoothie
 ```
 
@@ -53,7 +49,7 @@ import { Smoothie } from "vue-smoothie";
 ### There are **two flavors** of the component:
 
 - **`Smoothie`** - use this when you only need vertical scroll.
-- **`OmniSmoothie`** - use this when you need both vertical and horizontal scroll. In this case prefer using OmniSmoothie component for all scrollable areas even if they're vertical-only to prevent bundling both flavors simulataneously.
+- **`OmniSmoothie`** - use this when you need both vertical and horizontal scroll. In this case prefer using OmniSmoothie component for all scrollable areas even if they're vertical-only to prevent bundling both flavors simultaneously.
 
 ### `weight` prop
 
@@ -85,6 +81,6 @@ Both flavors expose an object via `ref` with properties:
 
 - Instead of styling `#app` with `padding` and etc, better style scroll container
 
-- Don't forget about `box-sizing: border-box` when a container has `border` and/or `padding` to accomodate it into its `width` and `height` to prevent multiple scrollbars, root-level (`<html>`) scrollbar overtaking overflow and other issues
+- Don't forget about `box-sizing: border-box` when a container has `border` and/or `padding` to accommodate it into its `width` and `height` to prevent multiple scrollbars, root-level (`<html>`) scrollbar overtaking overflow and other issues
 
 - Scrollbar appears inside of page not at a side - you need to set `width` to `100%`
