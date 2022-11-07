@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig, LibraryOptions } from "vite";
 import vue from "@vitejs/plugin-vue";
 
 import { resolve } from "path";
@@ -31,14 +31,20 @@ export default defineConfig(({ mode }) => ({
 
   publicDir: mode === "lib" ? false : "public",
 
+  esbuild: {
+    drop: ["console"],
+  },
+
   build: {
-    // minify: false,
-    minify: "terser",
-    terserOptions: {
-      compress: {
-        drop_console: true,
-      },
-    },
+    minify: false,
+    // minify: "terser",
+    // terserOptions: {
+    //   mangle: true,
+    //   compress: {
+    //     drop_console: true,
+    //   },
+    // },
+
     outDir: mode === "lib" ? "dist_lib" : "dist",
 
     emptyOutDir: !process.env.__OMNI,
@@ -58,11 +64,11 @@ export default defineConfig(({ mode }) => ({
 
     lib:
       mode === "lib"
-        ? {
+        ? ({
             entry: resolve(__dirname, "index.js"),
             name: "Smoothie Components Library",
             formats: ["es"],
-          }
+          } as LibraryOptions)
         : undefined,
   },
 

@@ -19,7 +19,7 @@ use bezier curves for transition and replace weight by duration
 
 but there's an extra empty space for some reason
 
-# so the reason behind infinite scroll seem to be lying in incorrect overflow behavior on firefox, when an element translated up it should not accomodate to its scroll height, but on ff it does
+# so the reason behind infinite scroll seem to be lying in incorrect overflow behavior on firefox, when an element translated up it should not accommodate to its scroll height, but on ff it does
 
 the fix seems to be setting sticky wrapper to overflow: hidden to prevent this behavior
 
@@ -44,6 +44,6 @@ key direction for fixing the infinite scroll bug is to make sticky's child take 
 `height: 0` - is not an option because we need a working resize observer
 @todo wait can we just use another wrapper??????????????????????????
 `max-height: 0` - is also not an option, even though with this resize observer works, scroll height is always wrong at the initial rendering. i have no idea why and there's no option to set it to a proper height
-@todo try to set it on scrol?????????????????????????????????????
+@todo try to set it on scroll?????????????????????????????????????
 `position: absolute` - promising option and regular flavor works great for vertical scroll but omni becomes broken for this one due to `width: 0` for sticky to prevent filling additional horizontal space
 it is possible to just add a prop prolly to set horizontal scroll
