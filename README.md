@@ -51,9 +51,7 @@ import { Smoothie } from "vue-smoothie";
 - **`Smoothie`** - use this when you only need vertical scroll.
 - **`OmniSmoothie`** - use this when you need both vertical and horizontal scroll. In this case prefer using OmniSmoothie component for all scrollable areas even if they're vertical-only to prevent bundling both flavors simultaneously.
 
-```
-⚠ Currently there's a bug on Firefox for horizontal scroll, which adds an extra scroll space based on scroll speed
-```
+**⚠ Currently there's a bug on Firefox for horizontal scroll, which adds an extra scroll space based on scroll speed**
 
 ### `weight` prop
 
