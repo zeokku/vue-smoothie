@@ -76,13 +76,25 @@ Smoothie.container(:weight="scrollWeight" ref="container")
   .content-wrap
     a#top(href="#bottom") {{ 'Go to the #bottom' }}
     .content
-      OmniSmoothie.nested-container(:weight="0.1")
-        div {{ 'NESTED CONTAINER\n' + longText }}
+      Smoothie.nested-container(:weight="0.1")
+        div
+          span(:style="{color: 'orangered'}") NESTED CONTAINER 
+          | {{longText }}
+      OmniSmoothie.nested-container(:weight="0.3")
+        div
+          span(:style="{color: 'orangered'}") NESTED VERTICAL WITH OMNI FLAVOR 
+          | {{longText }}
       OmniSmoothie.horizontal-container
-        div(:style="{ width: '200rem' }") {{ 'HORIZONTAL WORKS IN OMNI FLAVOR\n' + longText }}
+        div(:style="{ width: '200rem' }") 
+          span(:style="{color: 'orangered'}") HORIZONTAL SCROLL 
+          | {{longText }}
+      OmniSmoothie.bidirectional-container
+        div(:style="{ width: '75rem', background: '#6d3300' }") 
+          span(:style="{color: 'orangered'}") BIDERECTIONAL SCROLL 
+          | {{longText }}
       template(v-for="(image, index) in images")
-        img(:src="image" :style="{ gridColumn: index % 2 + 1, gridRow: index + 2 }")
-        div(:style="{ gridColumn: (index + 1) % 2 + 1, gridRow: index + 2 }") {{ paragraphs[index] }}
+        img(:src="image" :style="{ gridColumn: index % 2 + 1, gridRow: index + 4 }")
+        div(:style="{ gridColumn: (index + 1) % 2 + 1, gridRow: index + 4 }") {{ paragraphs[index] }}
     a#bottom(href="#top") {{ 'Go to the #top' }}
 </template>
 
@@ -138,8 +150,18 @@ body,
 }
 
 .horizontal-container {
-  height: 20rem;
   width: 100%;
+
+  grid-row: 2;
+  grid-column: 1 / 3;
+}
+
+.bidirectional-container {
+  height: 10rem;
+  width: 100%;
+
+  grid-row: 3;
+  grid-column: 1 / 3;
 }
 
 a {

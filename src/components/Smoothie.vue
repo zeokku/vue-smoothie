@@ -50,8 +50,9 @@ let contentStyle = ({
   // width: '100%', // inherit parent size
 
   position: 'absolute',
-  left: 0,
-  right: 0
+  width: '100%'
+  // left: 0,
+  // right: 0
 
   // maxHeight: 0
 } as CSSProperties
@@ -110,7 +111,7 @@ const onScroll = () => {
 }
 
 // don't forget this callback will be fired on old dom element removal, so technically it will update size twice, which shouldn't be a problem, though
-const updateSpacer = () => {
+const update = () => {
   console.log(
     'content', content!.scrollHeight, //
     'content wrap', content!.parentElement!.scrollHeight,
@@ -118,6 +119,29 @@ const updateSpacer = () => {
   )
 
   if (import.meta.env.__OMNI) {
+    //#region firefox horizontal scroll width fix
+    // the fix below works well, BUT resize observer won't trigger for the content element
+    // so stash it for later
+
+    // @note on firefox if sticky has any width, container's scroll width will always bug out and randomly add some extra width based on scroll speed.
+    // one fix is to set sticky's width to 0 BUT in this case vertical scroll breaks,
+    // as content has width: 100%
+    // the solution is to set 
+
+    let contentWrap = content!.parentElement!;
+
+    contentWrap.style.width = '';
+    // // @note this is required so we get a correct scrollWidth from the content wrap
+    // content!.style.maxWidth = '';
+
+    content!.style.minWidth = contentWrap.scrollWidth + 'px';
+    content!.style.width = '';
+
+    contentWrap.style.width = '0';
+
+    //#endregion
+
+    // update spacer
     spacer!.style.width = content!.scrollWidth + 'px';
     spacer!.style.height = content!.scrollHeight + 'px';
   }
@@ -133,7 +157,7 @@ const updateSpacer = () => {
 }
 
 
-let resizeObserver = new ResizeObserver(updateSpacer)
+let resizeObserver = new ResizeObserver(update)
 
 
 onMounted(() => {
@@ -142,7 +166,7 @@ onMounted(() => {
 
 
   // in case of hard defined dimensions, resize observer won't trigger, so do init run
-  updateSpacer()
+  update()
 
 
 
