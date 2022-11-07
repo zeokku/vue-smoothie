@@ -33,19 +33,19 @@ let wrap = $shallowRef<HTMLDivElement>();
 let content = $shallowRef<HTMLDivElement>();
 let spacer = $shallowRef<HTMLDivElement>();
 
-let wrapStyle: StyleValue = { overflow: 'auto' } /*satisfies StyleValue*/;
-let contentWrapStyle: StyleValue =
+let wrapStyle = { overflow: 'auto' } satisfies StyleValue;
+let contentWrapStyle =
   import.meta.env.__OMNI ?
     // width: 0 is needed (because for some reason it's counted towards horizontal overflow when by any logic it should not) and obv it's a problem on firefox only...
     // well width breaks vertical omni
-    ({ position: 'sticky', top: 0, left: 0 } /*satisfies StyleValue*/) :
-    ({ position: 'sticky', top: 0 } /*satisfies StyleValue*/);
+    { position: 'sticky', top: 0, left: 0 } satisfies StyleValue :
+    { position: 'sticky', top: 0 } satisfies StyleValue;
 
 
 // @note to make resize observer to work yet prevent stupid ass firefox bug, it's better to set maxHeight instead of height, because with static dimensions resize observer won't ever update
 // but this causes problems with initial scroll height calculation even on chrome omg
 // alternative is to set this pos: abs
-let contentStyle = ({
+let contentStyle = {
   willChange: 'transform',
   // width: '100%', // inherit parent size
 
@@ -55,8 +55,7 @@ let contentStyle = ({
   // right: 0
 
   // maxHeight: 0
-} as CSSProperties
-/*satisfies StyleValue*/);
+} satisfies StyleValue;
 
 
 let exposed = import.meta.env.__OMNI ?

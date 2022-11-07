@@ -33,14 +33,14 @@
   },
   "devDependencies": {
     "@tweakpane/core": "^1.1.0",
-    "@types/node": "^18.7.18",
-    "@vitejs/plugin-vue": "^3.0.3",
+    "@types/node": "^18.11.9",
+    "@vitejs/plugin-vue": "^3.2.0",
     "cross-env": "^7.0.3",
     "pug": "^3.0.2",
     "tweakpane": "^3.1.0",
-    "typescript": "^4.8",
-    "vite": "^3.0.7",
-    "vue": "^3.2.0",
+    "typescript": "4.9.2-rc",
+    "vite": "^3.2.3",
+    "vue": "^3.2.41",
     "vue-tsc": "^0.39.5"
   },
   "peerDependencies": {

@@ -36,7 +36,8 @@ export default defineConfig(({ mode }) => ({
   },
 
   build: {
-    minify: false,
+    minify: mode === "lib" ? false : "esbuild",
+    sourcemap: mode !== "lib",
     // minify: "terser",
     // terserOptions: {
     //   mangle: true,
